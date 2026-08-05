@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Projects</title>
+  </head>
+  <body class="page">
+    <h1 class="page-title">PROJECTS</h1>
+    <form class="form" data-store="project" data-next="dashboard.html">
+      <div class="field">
+        <label for="title">Project title</label>
+        <input id="title" name="title" placeholder="Enter title" required>
+      </div>
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Enter description" required>
+        </textarea>
+      </div>
+      <div class="field">
+        <label for="link">Project link</label>
+        <input id="link" name="link" type="url" placeholder="https://example.com">
+      </div>
+      <button class="button" type="submit">Save</button>
+      <p class="form-message">
+      </p>
+    </form>
+  </body>
+</html>

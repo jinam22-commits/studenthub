@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Resume Upload</title>
+  </head>
+  <body class="page">
+    <h1 class="page-title">RESUME</h1>
+    <form class="form auth-form" data-store="resume" data-next="dashboard.html">
+      <div class="field">
+        <label for="resume">Upload resume</label>
+        <input id="resume" name="resume" type="file" accept=".pdf,.doc,.docx" required>
+      </div>
+      <div class="field">
+        <label for="certificate">Other certificate</label>
+        <input id="certificate" name="certificate" type="file" accept=".pdf,.jpg,.jpeg,.png">
+      </div>
+      <button class="button" type="submit">Upload file</button>
+      <p class="form-message">
+      </p>
+    </form>
+  </body>
+</html>
