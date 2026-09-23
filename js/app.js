@@ -4,6 +4,7 @@ const store = {
 };
 
 function saveForm(form, key, nextPage) {
+  if (form.dataset.validation === 'registration') return;
   form.addEventListener('submit', event => {
     event.preventDefault();
     const values = Object.fromEntries(new FormData(form).entries());
@@ -20,6 +21,78 @@ function restoreForm(form, key) {
 }
 
 document.querySelectorAll('form[data-store]').forEach(form => { restoreForm(form, form.dataset.store); saveForm(form, form.dataset.store, form.dataset.next); });
+
+const registrationForm = document.querySelector('form[data-validation="registration"]');
+if (registrationForm) {
+  const rules = {
+    name: value => /^[A-Za-z][A-Za-z .'\-]{1,49}$/.test(value.trim()) ? '' : 'Enter a name using 2–50 letters, spaces, or . \' - characters.',
+    email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()) ? '' : 'Enter a valid email address, for example name@example.com.',
+    mobile: value => /^\d{10}$/.test(value.trim()) ? '' : 'Enter exactly 10 digits without spaces or symbols.',
+    password: value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{8,}$/.test(value) ? '' : 'Use 8+ characters including uppercase, lowercase, a number, and a special character.',
+    confirmPassword: value => value === registrationForm.elements.password.value && value !== '' ? '' : 'Passwords do not match.',
+    course: value => value ? '' : 'Select your course.',
+    year: value => /^(?:[1-4])$/.test(value) ? '' : 'Enter a year from 1 to 4.',
+    gender: () => registrationForm.querySelector('input[name="gender"]:checked') ? '' : 'Select a gender option.',
+    terms: () => registrationForm.elements.terms.checked ? '' : 'You must accept the terms and conditions.'
+  };
+
+  const setFieldState = (name, message) => {
+    const input = registrationForm.elements[name];
+    const field = name === 'gender' ? registrationForm.querySelector('.choice-field') : input.closest('.field');
+    const error = document.getElementById(`${name}-error`);
+    field.classList.toggle('invalid', Boolean(message));
+    field.classList.toggle('valid', !message && (name === 'gender' || name === 'terms' ? true : Boolean(input.value)));
+    if (error) error.textContent = message;
+    if (name === 'gender') Array.from(input).forEach(radio => radio.setAttribute('aria-invalid', String(Boolean(message))));
+    else if (name !== 'terms') input.setAttribute('aria-invalid', String(Boolean(message)));
+    return !message;
+  };
+
+  const passwordStrength = value => {
+    const meter = registrationForm.querySelector('.strength-meter');
+    const text = registrationForm.querySelector('.strength-text');
+    const score = [value.length >= 8, /[a-z]/.test(value), /[A-Z]/.test(value), /\d/.test(value), /[^A-Za-z0-9\s]/.test(value)].filter(Boolean).length;
+    const level = !value ? '' : score <= 2 ? 'weak' : score <= 4 ? 'medium' : 'strong';
+    meter.className = `strength-meter ${level}`;
+    text.textContent = `Password strength: ${level || 'not set'}`;
+  };
+
+  const validate = name => {
+    const input = registrationForm.elements[name];
+    const value = input && input.type === 'checkbox' ? input.checked : input?.value || '';
+    const message = rules[name](value);
+    if (name === 'password') passwordStrength(value);
+    return setFieldState(name, message);
+  };
+
+  Object.keys(rules).forEach(name => {
+    const inputs = name === 'gender' ? registrationForm.querySelectorAll('input[name="gender"]') : [registrationForm.elements[name]];
+    inputs.forEach(input => input.addEventListener('input', () => {
+      validate(name);
+      if (name === 'password' && registrationForm.elements.confirmPassword.value) validate('confirmPassword');
+    }));
+    inputs.forEach(input => input.addEventListener('change', () => validate(name)));
+  });
+
+  registrationForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const valid = Object.keys(rules).map(validate).every(Boolean);
+    const message = registrationForm.querySelector('.form-message');
+    if (!valid) {
+      message.classList.remove('success');
+      message.textContent = 'Please correct the highlighted fields before registering.';
+      registrationForm.querySelector('.invalid input, .invalid select')?.focus();
+      return;
+    }
+    const values = Object.fromEntries(new FormData(registrationForm).entries());
+    delete values.confirmPassword;
+    delete values.terms;
+    store.set(registrationForm.dataset.store, { ...store.get(registrationForm.dataset.store), ...values });
+    message.classList.add('success');
+    message.textContent = 'Registration successful. Opening your dashboard…';
+    setTimeout(() => location.href = registrationForm.dataset.next, 700);
+  });
+}
 
 if (document.body.classList.contains('portfolio-page')) {
   const personal = store.get('personal'); const education = store.get('education'); const skills = store.get('skills'); const project = store.get('project');
@@ -148,4 +221,3 @@ if (modal && openModalButton && closeModalButton) {
     }
   });
 }
-
