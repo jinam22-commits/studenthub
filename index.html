@@ -3,16 +3,112 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
     <title>Student Portfolio</title>
+    <script src="js/app.js" defer></script>
   </head>
   <body class="home-page">
-    <main class="home-card">
-      <h1>STUDENT PORTFOLIO</h1>
-      <p>Welcome to Student Portfolio</p>
-      <div class="home-actions">
-        <a class="button" href="pages/login.html">Login</a>
-        <a class="button" href="pages/register.html">Register</a>
+    <div class="notification-banner" id="notificationBanner" role="status" aria-live="polite">
+      <span>New internship opportunities are open for students this semester.</span>
+      <button class="dismiss-btn" type="button" aria-label="Dismiss notification">×</button>
+    </div>
+
+    <header class="landing-header">
+      <div class="header-row">
+        <button class="hamburger" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false" type="button">
+          <span></span><span></span><span></span>
+        </button>
+        <h1>STUDENT PORTFOLIO</h1>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">🌙</button>
       </div>
+
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <a href="pages/login.html">Login</a>
+        <a href="pages/register.html">Register</a>
+        <a href="pages/dashboard.html">Dashboard</a>
+        <a href="pages/portfolio.html">Portfolio</a>
+      </nav>
+    </header>
+
+    <main class="home-layout">
+      <section class="card home-hero">
+        <div>
+          <h2>Welcome to Student Portfolio</h2>
+          <p>Build your academic profile, manage your skills, and share your projects with a dynamic student portal designed for learning and growth.</p>
+          <div class="home-actions">
+            <a class="button" href="pages/login.html">Login</a>
+            <a class="button" href="pages/register.html">Register</a>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat"><strong>08</strong>Courses</div>
+          <div class="stat"><strong>15</strong>Projects</div>
+          <div class="stat"><strong>4.9</strong>Average</div>
+        </div>
+      </section>
+
+      <section class="card slider-section" aria-label="Portfolio highlights">
+        <h3>Campus Highlights</h3>
+        <div class="slider">
+          <button class="slider-btn prev" type="button" aria-label="Previous slide">❮</button>
+          <div class="slides">
+            <figure class="slide active">
+              <img src="images/Frame 1.png" alt="Students in coding lab">
+              <figcaption>Hands-on coding practice</figcaption>
+            </figure>
+            <figure class="slide">
+              <img src="images/frame 3.png" alt="Project presentations">
+              <figcaption>Presentation and teamwork</figcaption>
+            </figure>
+            <figure class="slide">
+              <img src="images/frame 6.png" alt="Workshop session">
+              <figcaption>Workshops and seminars</figcaption>
+            </figure>
+          </div>
+          <button class="slider-btn next" type="button" aria-label="Next slide">❯</button>
+        </div>
+      </section>
+
+      <section class="card faq-section">
+        <h3>Frequently Asked Questions</h3>
+
+        <div class="faq-item active">
+          <button class="faq-question" type="button" aria-expanded="true">How can I create my profile?</button>
+          <div class="faq-answer">
+            <p>Register and then log in to fill personal details, education, skills, and project information in the student dashboard.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">Can I preview my portfolio?</button>
+          <div class="faq-answer">
+            <p>Yes. After saving your details, use the portfolio page to view the final student profile and project summary.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false">Do I need to save data manually?</button>
+          <div class="faq-answer">
+            <p>No. The application stores your form details in localStorage, so your information remains available when you revisit the website.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Important Notice</h3>
+        <p>Project submission and portfolio review are due this Friday. Please update your details and ensure your final project is ready.</p>
+        <button class="primary-btn" id="openModalBtn" type="button">Open Notice</button>
+      </section>
     </main>
+
+    <div class="modal-backdrop" id="studentModal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close modal">×</button>
+        <h3 id="modalTitle">Portfolio Submission Notice</h3>
+        <p>Please complete all profile sections before the final portfolio review. Keep your resume, projects, and skills updated for a better presentation.</p>
+        <button class="primary-btn" type="button">Review Now</button>
+      </div>
+    </div>
   </body>
 </html>
